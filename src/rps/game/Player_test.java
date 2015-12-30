@@ -3,7 +3,10 @@ package rps.game;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 public class Player_test {
 
@@ -34,6 +37,18 @@ public class Player_test {
 		
 		assertEquals(player1.getScore(), 1);
 		assertEquals(player2.getScore(), 0);
+	}
+	
+	@Test
+	public void makeChoice(){
+		HashMap<String,Integer> choices = new HashMap<String,Integer>();
+		
+		choices.put("rock", 0);
+		choices.put("paper", 1);
+		
+		assertEquals(player1.makeChoice(choices), -1);
+		assertThat(player2.makeChoice(choices), anyOf(is(0), is(1)));
+		
 	}
 
 }

@@ -12,12 +12,15 @@
 
 package rps;
 
-import rps.config.Config;
+import rps.game.Game;
 
 public class Main {
 	
 	public static void main(String args[]){
-		Config.Init();
+
+		Game game = new Game();
+		game.Run();
+		
 	}
 
 }

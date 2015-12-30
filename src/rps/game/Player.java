@@ -4,6 +4,9 @@
 
 package rps.game;
 
+import java.util.Random;
+import java.util.HashMap;
+
 public class Player implements Players {
 
 	private String name;
@@ -15,6 +18,18 @@ public class Player implements Players {
 		this.name = name;
 		this.automated = automated;
 		this.score = 0;
+	}
+	
+	public int makeChoice(HashMap<String,Integer> choices) {
+		
+		if (automated) {
+			Random rn = new Random();
+			int choice = rn.nextInt(choices.size());
+			return choice;
+		}
+		
+		return -1;
+		
 	}
 	
 	public int getScore(){

@@ -5,6 +5,8 @@
 
 package rps.game;
 
+import java.util.HashMap;
+
 public interface Players {
 
 	public int getScore();
@@ -15,4 +17,5 @@ public interface Players {
 	
 	public String getName();
 
+	public int makeChoice(HashMap<String,Integer> choices);
 }

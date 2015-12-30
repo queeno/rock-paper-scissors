@@ -36,6 +36,10 @@ public final class Config {
 		return shape_matrix;
 	}
 	
+	public static List<HashMap<String,String>> GetPlayers(){
+		return players;
+	}
+	
 	private static void getPlayer(Element player) {
 		HashMap<String,String> dict = new HashMap<String,String>();
 		
