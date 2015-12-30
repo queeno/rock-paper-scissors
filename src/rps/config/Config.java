@@ -6,6 +6,8 @@
 package rps.config;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -18,10 +20,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
+
 public final class Config {
 	
-	public static List<HashMap<String,String>> players = new ArrayList<HashMap<String,String>>();
+	private static List<HashMap<String,String>> players = new ArrayList<HashMap<String,String>>();
+	private static String[] shape_names;
+	private static int[][] shape_matrix;
 	
+	
+	public static String[] GetShapeNames(){
+		return shape_names;
+	}
+	
+	public static int[][] GetShapeMatrix(){
+		return shape_matrix;
+	}
 	
 	private static void getPlayer(Element player) {
 		HashMap<String,String> dict = new HashMap<String,String>();
@@ -35,13 +48,148 @@ public final class Config {
 		}
 		
 		players.add(dict);
-		
-		System.out.println(players);
 	}
 	
 	
+	private static void readShapeMatrixFile(String FileName){
+		
+		int no_shapes = -1;
+		List<String[]> raw_shape_matrix = new ArrayList<String[]>();
+		
+		try {
+			String line;
+			File inputFile = new File(FileName);
+		
+			FileReader fr = new FileReader(inputFile);
+			BufferedReader br = new BufferedReader(fr);
+			
+	
+
+			while ((line = br.readLine()) != null) {
+				if (no_shapes == -1){
+					String[] line_split = line.replace("\"", "").split(",");
+					no_shapes = line_split.length;
+				}
+				
+				String[] line_split = line.replace("\"", "").split(",", no_shapes);
+				raw_shape_matrix.add(line_split);
+			}
+
+			br.close();
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		shape_names = raw_shape_matrix.get(0);
+		shape_matrix = new int[no_shapes][no_shapes];
+		
+		for (int i=0; i < no_shapes; i++){
+			for (int j=0; j < no_shapes; j++){
+				
+				// One extra row is taken by names
+				switch (raw_shape_matrix.get(i+1)[j]) {
+				case "0":
+					shape_matrix[i][j] = 0;
+					break;
+				case "1":
+					shape_matrix[i][j] = 1;
+					break;
+				default:
+					shape_matrix[i][j] = -1;
+					break;
+				}	
+			}
+		}
+		
+	}
+
+	
+	private static boolean checkElements(int i, int j){	
+
+		if (i == j) {
+			if (shape_matrix[i][j] != -1){
+				System.err.println(shape_matrix[i][j]);
+				
+				System.err.println("Shape Matrix, element [" + i + "][" + j
+						+ "]" + " expected empty, got " +
+						shape_matrix[j][i]);
+				System.err.println("The " + shape_names[i] + " cannot beat itself.");
+				return true;
+			}
+			else {
+				return false;
+			}
+		} else {
+			if (shape_matrix[i][j] == shape_matrix[j][i]){
+				if (shape_matrix[i][j] == 0) {
+
+					System.err.println("Shape Matrix, element [" + i + "][" + j
+							+ "]" + " expected 1 got 0. "
+							+ "The " + shape_names[i] +
+							" cannot be defeated by the " + shape_names[j] + " and the "
+							+ shape_names[j] + " cannot be defeated by the "
+							+ shape_names[i]);
+					return true;
+				} else if (shape_matrix[i][j] == 1) {
+					System.err.println("Shape Matrix, element [" + i + "][" + j
+							+ "]" + " expected 0 got 1. "
+							+ "The " + shape_names[i] +
+							" cannot be beat the " + shape_names[j] +
+							" and the " + shape_names[j] +
+							" cannot beat the " + shape_names[i]);
+					return true;
+				}
+			}
+			else {
+				if (shape_matrix[i][j] == 0){
+					System.out.println("The " + shape_names[i] + " is defeated by the "
+							+ shape_names[j]) ;
+					return false;
+				}
+				else if (shape_matrix[i][j] == 1) {
+					System.out.println("The " + shape_names[i] + " beats the "
+							+ shape_names[j]);
+					return false;
+				}
+			}
+		}
+
+		// This point should be never reached.
+		return true;
+	}
+	
+	private static void validateShapeMatrix(){
+		Boolean error = false;
+		System.out.println("Starting shape matrix validation...");
+		System.out.flush();
+
+		for (int i=0; i<shape_matrix.length; i++){
+			for (int j=0; j<shape_matrix.length; j++){
+				if (checkElements(i,j)) error = true ;
+				System.err.flush();
+			}
+		}
+
+		if (error) {
+			System.err.flush();
+			System.err.println("The shape matrix cannot be validated. Terminating...");
+			System.exit(1);
+		} else {
+			System.out.flush();
+			System.out.println("The shape matrix has been validated!");
+		}
+		
+	}
+	
+	private static void readShapeMatrix(String shapeMatrixFile){
+		readShapeMatrixFile(shapeMatrixFile);
+		validateShapeMatrix();
+	}
+	
 	public static void Init() {
 		readPlayerConfig("players.xml");
+		readShapeMatrix("game-base.csv");	
 	}
 	
 	private static void readPlayerConfig (String FileName){
