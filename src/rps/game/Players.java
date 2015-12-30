@@ -7,4 +7,12 @@ package rps.game;
 
 public interface Players {
 
+	public int getScore();
+
+	public void wins();
+	
+	public boolean isAutomated();
+	
+	public String getName();
+
 }
