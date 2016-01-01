@@ -190,7 +190,7 @@ public final class Config {
 		validateShapeMatrix();
 	}
 	
-	public void Init() {
+	public Config() {
 		readPlayerConfig("players.xml");
 		readShapeMatrix("game-base.csv");	
 	}
