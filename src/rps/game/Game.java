@@ -16,9 +16,11 @@ public class Game {
 	private int[][] shape_matrix;
 	private int rounds = 5;
 	
+	private Config config;
+	
 	private void initPlayers(){
 		
-		List <HashMap<String,String>> conf_players = Config.GetPlayers();
+		List <HashMap<String,String>> conf_players = config.GetPlayers();
 		int no_players = conf_players.size();
 		players = new Player[no_players];
 		
@@ -34,7 +36,7 @@ public class Game {
 	
 	private void initShapes(){
 		
-		String[] conf_shapes = Config.GetShapeNames();
+		String[] conf_shapes = config.GetShapeNames();
 		int no_shapes = conf_shapes.length;
 		shapes = new HashMap<String,Integer>();
 		
@@ -44,7 +46,7 @@ public class Game {
 	}
 	
 	private void initShapeMatrix(){
-		shape_matrix = Config.GetShapeMatrix();
+		shape_matrix = config.GetShapeMatrix();
 	}
 	
 	
@@ -101,7 +103,7 @@ public class Game {
 	
 	public Game() {
 		// Initialise config
-		Config.Init();
+		config = new Config();
 		
 		// Create players
 		initPlayers();
