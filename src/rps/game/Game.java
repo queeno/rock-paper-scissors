@@ -6,6 +6,8 @@
 package rps.game;
 
 import rps.config.Config;
+import rps.ui.Cli;
+
 import java.util.List;
 import java.util.HashMap;
 
@@ -14,13 +16,12 @@ public class Game {
 	private Player[] players;
 	private HashMap<String,Integer> shapes;
 	private int[][] shape_matrix;
-	private int rounds = 5;
 	
 	private Config config;
+	private Cli ui;
 	
-	private void initPlayers(){
-		
-		List <HashMap<String,String>> conf_players = config.GetPlayers();
+	private void createPlayers(List <HashMap<String,String>> conf_players){
+
 		int no_players = conf_players.size();
 		players = new Player[no_players];
 		
@@ -33,22 +34,6 @@ public class Game {
 
 		}
 	}
-	
-	private void initShapes(){
-		
-		String[] conf_shapes = config.GetShapeNames();
-		int no_shapes = conf_shapes.length;
-		shapes = new HashMap<String,Integer>();
-		
-		for (int i=0; i < no_shapes; i++) {
-			shapes.put(conf_shapes[i], i);
-		}
-	}
-	
-	private void initShapeMatrix(){
-		shape_matrix = config.GetShapeMatrix();
-	}
-	
 	
 	private int play(int shape1_i, int shape2_j) {
 
@@ -91,28 +76,48 @@ public class Game {
 	}
 	
 	
+	private void printStatus(int current_round){
+		
+		ui.PrintOutput("--- GAME STATUS ---");
+		ui.PrintOutput("Round " + current_round + " of " + config.GetRounds());
+		ui.PrintOutput("CURRENT SCORES:");
+		
+		for (Player player : players) {
+			ui.PrintOutput(player.getName() + ": " + player.getScore());
+		}
+		
+		ui.PrintOutput("");
+		
+	}
+	
+	
 	public void Run(){
 		
-		for (int i=0; i < rounds; i++){
+		ui.PrintOutput("WELCOME TO ROCK-PAPER-SCISSORS");
+		
+		for (int i=1; i <= config.GetRounds(); i++){
+			printStatus(i);
 			nextRound();
-			System.out.flush();
 		}
 		
 	}
 	
 	
 	public Game() {
-		// Initialise config
-		config = new Config();
-		
-		// Create players
-		initPlayers();
 
-		// Create shapes
-		initShapes();
+		// Initialise UI
+		ui = new Cli();
+
+		// Initialise config
+		config = new Config(ui);
+
+		// Create players
+		createPlayers(config.GetPlayers());
 		
-		// Create shape matrix
-		initShapeMatrix();
+		// Create shapes
+		shapes = config.GetShapes();
+		shape_matrix = config.GetShapeMatrix();
+
 	}
 	
 }
