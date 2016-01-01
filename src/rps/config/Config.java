@@ -20,15 +20,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
+import rps.ui.Cli;
 
 public final class Config {
 	
-	private List<HashMap<String,String>> players = new ArrayList<HashMap<String,String>>();
-	private String[] shape_names;
+	private List<HashMap<String,String>> players;
+	private HashMap<String,Integer> shapes;
 	private int[][] shape_matrix;
+	private int rounds;
+	private boolean logging;
 	
-	public String[] GetShapeNames(){
-		return shape_names;
+	private Cli ui;
+	
+	public HashMap<String,Integer> GetShapes(){
+		return shapes;
 	}
 	
 	public int[][] GetShapeMatrix(){
@@ -39,22 +44,38 @@ public final class Config {
 		return players;
 	}
 	
-	private void getPlayer(Element player) {
-		HashMap<String,String> dict = new HashMap<String,String>();
-		
-		// Get all the elements in 'player'
-		NodeList nodes = player.getElementsByTagName("*");
-		
-		for (int i=0; i < nodes.getLength(); i++){
-			Element e = (Element) nodes.item(i);
-			dict.put(e.getTagName(), e.getFirstChild().getNodeValue());			
-		}
-		
-		players.add(dict);
+	public int GetRounds(){
+		return rounds;
+	}
+	
+	public boolean GetLogging(){
+		return logging;
 	}
 	
 	
-	private void readShapeMatrixFile(String FileName){
+	public Config(Cli ui) {
+		
+		this.ui = ui;
+	
+		readConfig("config.xml");
+		readShapeMatrix("shapes-base.csv");
+		
+		setLoggingLevel();
+		
+		Validate validate = new Validate(ui, shape_matrix, shapes.keySet().toArray(new String[shapes.size()]));
+		validate.validateShapeMatrix();
+
+	}
+	
+	private void setLoggingLevel(){
+
+		ui.SetPrintOutLog(logging);
+		
+	}
+
+	private List<String[]> readShapeMatrixFile(String FileName){
+		
+		ui.PrintLog("Reading " + FileName);
 		
 		int no_shapes = -1;
 		List<String[]> raw_shape_matrix = new ArrayList<String[]>();
@@ -65,8 +86,6 @@ public final class Config {
 		
 			FileReader fr = new FileReader(inputFile);
 			BufferedReader br = new BufferedReader(fr);
-			
-	
 
 			while ((line = br.readLine()) != null) {
 				if (no_shapes == -1){
@@ -83,8 +102,24 @@ public final class Config {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	
+		return raw_shape_matrix;
+	}
+	
+	
+	private void createShapeMatrix(List<String[]> raw_shape_matrix) {
 		
-		shape_names = raw_shape_matrix.get(0);
+		String[] shape_names = raw_shape_matrix.get(0);
+		
+		int no_shapes = shape_names.length;
+
+		shapes = new HashMap<String,Integer>();
+		
+		for (int i=0; i < no_shapes; i++) {
+			shapes.put(shape_names[i], i);
+		}
+		
+		
 		shape_matrix = new int[no_shapes][no_shapes];
 		
 		for (int i=0; i < no_shapes; i++){
@@ -106,96 +141,16 @@ public final class Config {
 		}
 		
 	}
-
-	
-	private boolean checkElements(int i, int j){	
-
-		if (i == j) {
-			if (shape_matrix[i][j] != -1){
-				System.err.println(shape_matrix[i][j]);
-				
-				System.err.println("Shape Matrix, element [" + i + "][" + j
-						+ "]" + " expected empty, got " +
-						shape_matrix[j][i]);
-				System.err.println("The " + shape_names[i] + " cannot beat itself.");
-				return true;
-			}
-			else {
-				return false;
-			}
-		} else {
-			if (shape_matrix[i][j] == shape_matrix[j][i]){
-				if (shape_matrix[i][j] == 0) {
-
-					System.err.println("Shape Matrix, element [" + i + "][" + j
-							+ "]" + " expected 1 got 0. "
-							+ "The " + shape_names[i] +
-							" cannot be defeated by the " + shape_names[j] + " and the "
-							+ shape_names[j] + " cannot be defeated by the "
-							+ shape_names[i]);
-					return true;
-				} else if (shape_matrix[i][j] == 1) {
-					System.err.println("Shape Matrix, element [" + i + "][" + j
-							+ "]" + " expected 0 got 1. "
-							+ "The " + shape_names[i] +
-							" cannot be beat the " + shape_names[j] +
-							" and the " + shape_names[j] +
-							" cannot beat the " + shape_names[i]);
-					return true;
-				}
-			}
-			else {
-				if (shape_matrix[i][j] == 0){
-					System.out.println("The " + shape_names[i] + " is defeated by the "
-							+ shape_names[j]) ;
-					return false;
-				}
-				else if (shape_matrix[i][j] == 1) {
-					System.out.println("The " + shape_names[i] + " beats the "
-							+ shape_names[j]);
-					return false;
-				}
-			}
-		}
-
-		// This point should be never reached.
-		return true;
-	}
-	
-	private void validateShapeMatrix(){
-		Boolean error = false;
-		System.out.println("Starting shape matrix validation...");
-		System.out.flush();
-
-		for (int i=0; i<shape_matrix.length; i++){
-			for (int j=0; j<shape_matrix.length; j++){
-				if (checkElements(i,j)) error = true ;
-				System.err.flush();
-			}
-		}
-
-		if (error) {
-			System.err.flush();
-			System.err.println("The shape matrix cannot be validated. Terminating...");
-			System.exit(1);
-		} else {
-			System.out.flush();
-			System.out.println("The shape matrix has been validated!");
-		}
-		
-	}
 	
 	private void readShapeMatrix(String shapeMatrixFile){
-		readShapeMatrixFile(shapeMatrixFile);
-		validateShapeMatrix();
+		List<String[]> raw_matrix = readShapeMatrixFile(shapeMatrixFile);
+		createShapeMatrix(raw_matrix);
 	}
 	
-	public Config() {
-		readPlayerConfig("players.xml");
-		readShapeMatrix("game-base.csv");	
-	}
+
 	
-	private void readPlayerConfig (String FileName){
+	private void readConfig (String FileName){
+		players = new ArrayList<HashMap<String,String>>();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		try {
@@ -215,13 +170,39 @@ public final class Config {
 				Element e = (Element) nodes.item(i);
 				getPlayer(e);	
 			}
-		
+			
+			// Get only the elements within the 'rounds' tag
+			NodeList rounds_tag = rootElem.getElementsByTagName("rounds");
+			Element e_rounds = (Element) rounds_tag.item(0);
+			
+			rounds = Integer.parseInt(e_rounds.getFirstChild().getNodeValue());
+			
+			// Get only the elements within the 'logging' tag
+			NodeList logging_tag = rootElem.getElementsByTagName("logging");
+			Element e_logging = (Element) logging_tag.item(0);
+			
+			logging = Boolean.parseBoolean(e_logging.getFirstChild().getNodeValue());
+			
+			
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-
 		
 		
+	}
+	
+	private void getPlayer(Element player) {
+		HashMap<String,String> dict = new HashMap<String,String>();
+		
+		// Get all the elements in 'player'
+		NodeList nodes = player.getElementsByTagName("*");
+		
+		for (int i=0; i < nodes.getLength(); i++){
+			Element e = (Element) nodes.item(i);
+			dict.put(e.getTagName(), e.getFirstChild().getNodeValue());			
+		}
+		
+		players.add(dict);
 	}
 	
 }

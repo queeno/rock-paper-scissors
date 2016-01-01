@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<players>
+<config>
   <player>
     <name>Simon</name>
     <automated>true</automated>
@@ -12,4 +12,6 @@
     <name>Mark</name>
     <automated>true</automated>
   </player>
-</players>
+  <rounds>5</rounds>
+  <logging>true</logging>
+</config>
