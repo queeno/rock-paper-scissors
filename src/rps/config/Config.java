@@ -23,24 +23,23 @@ import java.util.ArrayList;
 
 public final class Config {
 	
-	private static List<HashMap<String,String>> players = new ArrayList<HashMap<String,String>>();
-	private static String[] shape_names;
-	private static int[][] shape_matrix;
+	private List<HashMap<String,String>> players = new ArrayList<HashMap<String,String>>();
+	private String[] shape_names;
+	private int[][] shape_matrix;
 	
-	
-	public static String[] GetShapeNames(){
+	public String[] GetShapeNames(){
 		return shape_names;
 	}
 	
-	public static int[][] GetShapeMatrix(){
+	public int[][] GetShapeMatrix(){
 		return shape_matrix;
 	}
 	
-	public static List<HashMap<String,String>> GetPlayers(){
+	public List<HashMap<String,String>> GetPlayers(){
 		return players;
 	}
 	
-	private static void getPlayer(Element player) {
+	private void getPlayer(Element player) {
 		HashMap<String,String> dict = new HashMap<String,String>();
 		
 		// Get all the elements in 'player'
@@ -55,7 +54,7 @@ public final class Config {
 	}
 	
 	
-	private static void readShapeMatrixFile(String FileName){
+	private void readShapeMatrixFile(String FileName){
 		
 		int no_shapes = -1;
 		List<String[]> raw_shape_matrix = new ArrayList<String[]>();
@@ -109,7 +108,7 @@ public final class Config {
 	}
 
 	
-	private static boolean checkElements(int i, int j){	
+	private boolean checkElements(int i, int j){	
 
 		if (i == j) {
 			if (shape_matrix[i][j] != -1){
@@ -163,7 +162,7 @@ public final class Config {
 		return true;
 	}
 	
-	private static void validateShapeMatrix(){
+	private void validateShapeMatrix(){
 		Boolean error = false;
 		System.out.println("Starting shape matrix validation...");
 		System.out.flush();
@@ -186,17 +185,17 @@ public final class Config {
 		
 	}
 	
-	private static void readShapeMatrix(String shapeMatrixFile){
+	private void readShapeMatrix(String shapeMatrixFile){
 		readShapeMatrixFile(shapeMatrixFile);
 		validateShapeMatrix();
 	}
 	
-	public static void Init() {
+	public void Init() {
 		readPlayerConfig("players.xml");
 		readShapeMatrix("game-base.csv");	
 	}
 	
-	private static void readPlayerConfig (String FileName){
+	private void readPlayerConfig (String FileName){
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		try {
