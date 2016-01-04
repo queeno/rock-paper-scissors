@@ -10,7 +10,7 @@
   </player>
   <player>
     <name>Mark</name>
-    <automated>false</automated>
+    <automated>true</automated>
   </player>
   <rounds>5</rounds>
   <logging>false</logging>
