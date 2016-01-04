@@ -10,6 +10,10 @@ JUNIT_JAR    := lib/junit-4.12.jar
 CLASSPATH    := :./$(JUNIT_JAR):./$(HAMCREST_JAR):$(OUTPUT_DIR)
 CONFIG   		 := config.xml shapes-base.csv
 
+ifndef RPS_ARGS
+	RPS_ARGS = $(CONFIG)
+endif
+
 # all_javas - Temp file for holding source file list
 all_javas := $(OUTPUT_DIR)/all.javas
 
@@ -48,4 +52,4 @@ classpath:
 
 .PHONY: run
 run: classpath
-	java rps.Main $(SIM_CONFIG)
+	java rps.Main $(RPS_ARGS)
