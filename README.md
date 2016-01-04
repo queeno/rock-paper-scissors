@@ -2,6 +2,10 @@
 
 An implementation of the famous [Rock-Paper-Scissors](https://en.wikipedia.org/wiki/Rock-paper-scissors) game in Java.
 
+## Trello board
+
+A public [trello board](https://trello.com/b/dQTBkDv8/rock-paper-scissors) has been set up to display the development of this application.
+
 ## Compile and run
 
 Please make sure you have JRE 1.8 installed on your machine.
@@ -57,7 +61,7 @@ This file describes the players, game rounds and level of logging.
 
 ### shapes-base.csv
 
-A CSV file containing a list of shapes and the relationship between them.
+This file contains a list of shapes and relationships between them.
 Example:
 
 ``` 
@@ -69,20 +73,20 @@ Example:
 
 The first row of the matrix identifies the names of the shapes, the remaining rows (also referred to as: 'the shape\_matrix') represent an NxN matrix which dictates the relationship between the shapes.
 
-The n row and column refer to the element defined in that column.
+The `n` row and column refer to the element defined in that column.
 For example, in the example above, the first column and row refer to 'rock', the second column and row refer to 'paper' and the third column and row refer to 'scissors'.
 
-With that in mind, element M\_{a,b}, defines the relationship between `elem_a` and `elem_b`.
+With that in mind, element M\_{n1,n2}, defines the relationship between `elem_n1` and `elem_n2`.
 
-'0' indicates `elem_a` is defeated by `elem_b`.
-'1' indicates `elem_a` beats `elem_b`.
+'0' indicates `elem_n1` is defeated by `elem_n2`.
+'1' indicates `elem_n1` beats `elem_n2`.
 '' indicates a draw.
 
 For example, element M\_{0,1} = 0 indicates that the rock is defeated by the paper. element M\_{2,1} = 1 indicates that the scissors beat the paper.
 
 During configuration loading, a matrix validation procedure is initiated, which checks that:
-- M\_{a,a} = "" (the same shape must draw)
-- M\_{a,b} != M\_{b,a} (if the paper beats the rock, then the rock must be defeated by the paper).
+- M\_{n1,n1} == "" (the same shape must draw)
+- M\_{n1,n2} == !M\_{n2,n1} (if the paper beats the rock, then the rock must be defeated by the paper).
 
 ### Custom config files
 
@@ -108,7 +112,7 @@ Shapes: rock, paper, scissors
 Players: Simon (H), Computer (C)
 ```
 
-The game constists of n rounds. During every round, each of the users guesses one shape, the shapes fight each other and the winners earn one point.
+The game constists of `n` rounds. During every round, each of the users guesses one shape, the shapes fight each other and the winners earn one point.
 
 A provisional scoreboard is displayed at the end of each round and the final scoreboard is displayed before game termination.
 
@@ -121,7 +125,9 @@ Waiting for all players to make their choices...
 Simon, please make a choice [rock, paper, scissors, or empty to abort]:
 ```
 
-The input is case insensitive. You will be reprompted for non-recognised words. Enter empty to terminate the game.
+The input is case insensitive. You will be reprompted for non-recognised words.
+
+Enter to terminate the game.
 
 ```
 Terminating game... Hej hej!
