@@ -53,12 +53,22 @@ public final class Config {
 	}
 	
 	
-	public Config(Cli ui) {
+	public Config(Cli ui, String[] args) {
+		
+		String config_file = "config.xml";
+		String shapes_file = "shapes-base.csv";
 		
 		this.ui = ui;
 	
-		readConfig("config.xml");
-		readShapeMatrix("shapes-base.csv");
+		if (args.length == 1) {
+			config_file = args[0];
+		} else if (args.length > 1){
+			config_file = args[0];
+			shapes_file = args[1];
+		}
+		
+		readConfig(config_file);
+		readShapeMatrix(shapes_file);
 		
 		setLoggingLevel();
 		

@@ -135,13 +135,13 @@ public class Game implements Games {
 	}
 	
 	
-	public Game() {
+	public Game(String[] args) {
 
 		// Initialise UI
 		ui = new Cli();
 
 		// Initialise config
-		config = new Config(ui);
+		config = new Config(ui, args);
 
 		// Create players
 		createPlayers(config.GetPlayers());
