@@ -11,7 +11,7 @@ import rps.ui.Cli;
 import java.util.List;
 import java.util.HashMap;
 
-public class Game {
+public class Game implements Games {
 
 	private Player[] players;
 	private String[] shapes;

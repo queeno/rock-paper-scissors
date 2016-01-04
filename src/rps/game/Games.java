@@ -6,6 +6,7 @@
 package rps.game;
 
 public interface Games {
-	
+
+	public void Run();
 	
 }
