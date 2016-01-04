@@ -25,14 +25,14 @@ import rps.ui.Cli;
 public final class Config {
 	
 	private List<HashMap<String,String>> players;
-	private HashMap<String,Integer> shapes;
+	private String[] shapes;
 	private int[][] shape_matrix;
 	private int rounds;
 	private boolean logging;
 	
 	private Cli ui;
 	
-	public HashMap<String,Integer> GetShapes(){
+	public String[] GetShapes(){
 		return shapes;
 	}
 	
@@ -62,7 +62,7 @@ public final class Config {
 		
 		setLoggingLevel();
 		
-		Validate validate = new Validate(ui, shape_matrix, shapes.keySet().toArray(new String[shapes.size()]));
+		Validate validate = new Validate(ui, shape_matrix, shapes);
 		validate.validateShapeMatrix();
 
 	}
@@ -109,16 +109,8 @@ public final class Config {
 	
 	private void createShapeMatrix(List<String[]> raw_shape_matrix) {
 		
-		String[] shape_names = raw_shape_matrix.get(0);
-		
-		int no_shapes = shape_names.length;
-
-		shapes = new HashMap<String,Integer>();
-		
-		for (int i=0; i < no_shapes; i++) {
-			shapes.put(shape_names[i], i);
-		}
-		
+		shapes = raw_shape_matrix.get(0);
+		int no_shapes = shapes.length;
 		
 		shape_matrix = new int[no_shapes][no_shapes];
 		

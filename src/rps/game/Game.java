@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class Game {
 
 	private Player[] players;
-	private HashMap<String,Integer> shapes;
+	private String[] shapes;
 	private int[][] shape_matrix;
 	
 	private Config config;
@@ -30,7 +30,7 @@ public class Game {
 			String player_name = conf_players.get(i).get("name");
 			boolean automated = Boolean.parseBoolean(conf_players.get(i).get("automated"));
 			
-			players[i] = new Player(player_name, automated);
+			players[i] = new Player(ui, player_name, automated);
 
 		}
 	}
@@ -42,10 +42,15 @@ public class Game {
 	}
 	
 	
-	private void nextRound(){
+	private void nextRound(int round_number){
 		
 		int[] choices = new int[players.length];
 		
+		ui.PrintOutput("--- Round " + round_number + " of " + config.GetRounds()
+						+ " ---");
+		ui.PrintOutput("");
+		
+		ui.PrintOutput("Waiting for all players to make their choices...");
 		// Collect inputs from players
 		for (int i=0; i < players.length; i++){
 			choices[i] = players[i].makeChoice(shapes);
@@ -55,32 +60,33 @@ public class Game {
 		// Play between players
 		for (int i=0; i < players.length; i++){
 			for (int j=i+1; j < players.length; j++){
-				System.out.println("playing " + players[i].getName() + " vs " + players[j].getName());
-				System.out.println(i + " " + j + "choices: " + choices[i] + " " + choices[j]);
+				ui.PrintOutput("");
+				ui.PrintOutput(players[i].getName() + " vs " + players[j].getName());
+				ui.PrintOutput(players[i].getName() + " selects " + shapes[choices[i]]);
+				ui.PrintOutput(players[j].getName() + " selects " + shapes[choices[j]]);
+
 				switch(play(choices[i], choices[j])) {
 				case 0:
 					players[j].wins();
-					System.out.println("player " + players[i].getName() + " wins");
+					ui.PrintOutput(players[j].getName() + " wins!");
 					break;
 				case 1:
 					players[i].wins();
-					System.out.println("player " + players[j].getName() + " wins");
+					ui.PrintOutput(players[i].getName() + " wins!");
 					break;
 				default:
-					System.out.println("player " + players[i].getName() + " and " + players[j].getName() + " draw.");
+					System.out.println(players[i].getName() + " and " + players[j].getName() + " draw.");
 					break;
 				}
-				System.out.flush();
 			}
 		}
 	}
 	
 	
-	private void printStatus(int current_round){
+	private void printStatus(){
 		
-		ui.PrintOutput("--- GAME STATUS ---");
-		ui.PrintOutput("Round " + current_round + " of " + config.GetRounds());
-		ui.PrintOutput("CURRENT SCORES:");
+		ui.PrintOutput("");
+		ui.PrintOutput("--- SCORES ---");
 		
 		for (Player player : players) {
 			ui.PrintOutput(player.getName() + ": " + player.getScore());
@@ -91,14 +97,40 @@ public class Game {
 	}
 	
 	
+	private void printGameConfig(){
+
+		String[] myPlayers = new String[players.length];
+		
+		for (int i=0; i < players.length; i++ ) {
+			myPlayers[i] = players[i].getName();
+			if (players[i].isAutomated()) {
+				myPlayers[i] = myPlayers[i] + " (C)";
+			} else {
+				myPlayers[i] = myPlayers[i] + " (H)";
+			}
+		}
+		
+		ui.PrintOutput("");
+		ui.PrintOutput("--- GAME CONFIGURATION ---");
+		
+		ui.PrintOutput("Shapes: " + String.join(", ", shapes));
+		ui.PrintOutput("Players: " + String.join(", ", myPlayers));
+		
+	}
+	
 	public void Run(){
 		
 		ui.PrintOutput("WELCOME TO ROCK-PAPER-SCISSORS");
+		printGameConfig();
 		
 		for (int i=1; i <= config.GetRounds(); i++){
-			printStatus(i);
-			nextRound();
+			printStatus();
+			nextRound(i);
 		}
+		
+		ui.PrintOutput("");
+		ui.PrintOutput("--- FINAL RESULTS ---");
+		printStatus();
 		
 	}
 	

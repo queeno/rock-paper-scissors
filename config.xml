@@ -2,7 +2,7 @@
 <config>
   <player>
     <name>Simon</name>
-    <automated>true</automated>
+    <automated>false</automated>
   </player>
   <player>
     <name>Computer</name>
@@ -10,8 +10,8 @@
   </player>
   <player>
     <name>Mark</name>
-    <automated>true</automated>
+    <automated>false</automated>
   </player>
   <rounds>5</rounds>
-  <logging>true</logging>
+  <logging>false</logging>
 </config>
