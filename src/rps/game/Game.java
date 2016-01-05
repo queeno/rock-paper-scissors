@@ -11,7 +11,7 @@ import rps.ui.Cli;
 import java.util.List;
 import java.util.HashMap;
 
-import utils.Utils;
+import rps.utils.Utils;
 
 public class Game implements Games {
 

@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import rps.ui.Cli;
 
-import utils.Utils;
+import rps.utils.Utils;
 
 public class Player implements Players {
 

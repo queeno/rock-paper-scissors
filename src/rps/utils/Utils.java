@@ -1,4 +1,4 @@
-package utils;
+package rps.utils;
 
 import java.util.Arrays;
 
