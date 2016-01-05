@@ -1,21 +1,22 @@
-package rps.game;
+package test.rps;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import rps.game.Player;
 import rps.ui.Cli;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-public class Player_test {
+public class Player_Test {
 
 	private Player player1;
 	private Player player2;
 	
 	@Before
 	public void setUp() throws Exception {
-		player1 = new Player(new Cli(), "name1", false);
+		player1 = new Player(new Cli(), "name1", true);
 		player2 = new Player(new Cli(), "name2", true);
 	}
 
@@ -27,7 +28,7 @@ public class Player_test {
 	
 	@Test
 	public void isAutomated() {
-		assertEquals(player1.isAutomated(), false);
+		assertEquals(player1.isAutomated(), true);
 		assertEquals(player2.isAutomated(), true);
 	}
 	
@@ -43,7 +44,7 @@ public class Player_test {
 	public void makeChoice(){
 		String[] choices = new String[]{"rock", "paper"};
 		
-		assertEquals(player1.makeChoice(choices), -1);
+		assertThat(player1.makeChoice(choices), anyOf(is(0), is(1)));
 		assertThat(player2.makeChoice(choices), anyOf(is(0), is(1)));
 		
 	}
