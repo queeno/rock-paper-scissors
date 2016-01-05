@@ -11,6 +11,8 @@ import rps.ui.Cli;
 import java.util.List;
 import java.util.HashMap;
 
+import utils.Utils;
+
 public class Game implements Games {
 
 	private Player[] players;
@@ -113,8 +115,8 @@ public class Game implements Games {
 		ui.PrintOutput("");
 		ui.PrintOutput("--- GAME CONFIGURATION ---");
 		
-		ui.PrintOutput("Shapes: " + String.join(", ", shapes));
-		ui.PrintOutput("Players: " + String.join(", ", myPlayers));
+		ui.PrintOutput("Shapes: " + Utils.join(", ", shapes));
+		ui.PrintOutput("Players: " + Utils.join(", ", myPlayers));
 		
 	}
 	

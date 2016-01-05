@@ -5,10 +5,11 @@
 package rps.game;
 
 import java.util.Random;
+import java.util.Arrays;
 
 import rps.ui.Cli;
 
-import java.util.Arrays;
+import utils.Utils;
 
 public class Player implements Players {
 
@@ -42,7 +43,7 @@ public class Player implements Players {
 		
 		while (true) {
 			ui.PrintOutputNoReturn(name + ", please make a choice ["
-					+ String.join(", ",choices) + ", or empty to abort]: ");
+					+ Utils.join(", ",choices) + ", or empty to abort]: ");
 	
 			choice = ui.TakeInput();
 			
