@@ -1,3 +1,5 @@
+[![rock-paper-scissors](https://travis-ci.org/queeno/rock-paper-scissors.png?branch=master)](https://travis-ci.org/queeno/rock-paper-scissors)
+
 # Rock-Paper-Scissors
 
 An implementation of the famous [Rock-Paper-Scissors](https://en.wikipedia.org/wiki/Rock-paper-scissors) game in Java.
