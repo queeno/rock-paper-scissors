@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <player>
+    <name>Simon</name>
+    <automated>false</automated>
+  </player>
+  <player>
+    <name>Computer</name>
+    <automated>false</automated>
+  </player>
+  <rounds>5</rounds>
+  <logging>false</logging>
+</config>
