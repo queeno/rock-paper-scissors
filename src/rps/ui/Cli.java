@@ -5,19 +5,20 @@ import java.io.InputStreamReader;
 
 public class Cli implements Ui {
 
+	BufferedReader scan;
 	private boolean printoutlog;
 	
 	public Cli (){
+		scan = new BufferedReader(new InputStreamReader(System.in));
 		printoutlog = false;
 	}
 	
 	public String TakeInput(){
-		BufferedReader scan = new BufferedReader(new InputStreamReader(System.in));
+		
 		String input = "";
 		
 		try {
 			input = scan.readLine();
-			//scan.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
