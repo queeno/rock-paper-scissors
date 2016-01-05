@@ -126,18 +126,16 @@ public final class Config {
 		
 		for (int i=0; i < no_shapes; i++){
 			for (int j=0; j < no_shapes; j++){
+
+				String elem = raw_shape_matrix.get(i+1)[j];
 				
 				// One extra row is taken by names
-				switch (raw_shape_matrix.get(i+1)[j]) {
-				case "0":
+				if (elem.equals("0")) {
 					shape_matrix[i][j] = 0;
-					break;
-				case "1":
+				} else if (elem.equals("1")) {
 					shape_matrix[i][j] = 1;
-					break;
-				default:
+				} else {
 					shape_matrix[i][j] = -1;
-					break;
 				}	
 			}
 		}
