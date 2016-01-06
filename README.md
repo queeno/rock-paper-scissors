@@ -10,6 +10,8 @@ A public [trello board](https://trello.com/b/dQTBkDv8/rock-paper-scissors) has b
 
 ## Compile and run
 
+### Makefile
+
 Please make sure you have JRE 1.8 installed on your machine.
 
 Run the following commands to compile and run the application with default options:
@@ -19,9 +21,37 @@ make
 make run
 ```
 
-The Makefile will automatically create a `bin/` directory in which to place the compiled Java code.
+The Makefile will automatically create a `bin/` directory in which the Makefile will place the compiled Java code.
 
 Please refer how to the next section if you want to change the defaults. 
+
+### Maven
+
+You can build this project using Maven.
+
+Please make sure you have Maven installed on your machine with outbound internet connection.
+
+You can run:
+
+```bash
+mvn package
+```
+
+in order to run the tests and generate the JAR.
+
+This will create a `target/` directory in which maven places the compiled Java code.
+
+If you want to run the JAR with default options, please run:
+
+```bash
+java -jar target/rps-1.0.jar
+```
+
+You can also easily pass your own config file and shape matrix (please refer to the next section):
+
+```bash
+java -jar target/rps-1.0.jar config.xml shape-extended.csv
+```
 
 ## How to configure
 
